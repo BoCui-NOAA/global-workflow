@@ -1,0 +1,40 @@
+#!/bin/bash
+#PBS -N out_scp_C768  
+#PBS -j oe
+#PBS -S /bin/bash
+#PBS -q dev_transfer
+#PBS -A NAEFS-DEV
+#PBS -l walltime=05:35:00
+#PBS -l select=1:ncpus=1:mem=2GB
+##PBS -l debug=true
+
+COM_c=/lfs/h2/emc/couple/noscrub/jessica.meixner/HR3/scoutruns/t02C768/COMROOT/t02C768
+PDY=20200213
+
+#COM_c=/lfs/h2/emc/couple/noscrub/jessica.meixner/HR3/scoutruns/hr3scoutC768/COMROOT/hr3scoutC768 
+#PDY=20200123
+
+COM_d=/lfs/h2/emc/vpppg/noscrub/bo.cui/BUFR/data_bufr_ctl/hr3scoutC768
+mkdir -p $COM_d
+
+dir=gfs.${PDY}/00/model_data/atmos/history
+
+mkdir -p $COM_d/$dir
+
+rsync -avzh bo.cui@cdxfer.wcoss2.ncep.noaa.gov:$COM_c/$dir/*f00* $COM_d/$dir/
+rsync -avzh bo.cui@cdxfer.wcoss2.ncep.noaa.gov:$COM_c/$dir/*f01* $COM_d/$dir/
+rsync -avzh bo.cui@cdxfer.wcoss2.ncep.noaa.gov:$COM_c/$dir/*f02* $COM_d/$dir/
+rsync -avzh bo.cui@cdxfer.wcoss2.ncep.noaa.gov:$COM_c/$dir/*f03* $COM_d/$dir/
+rsync -avzh bo.cui@cdxfer.wcoss2.ncep.noaa.gov:$COM_c/$dir/*f04* $COM_d/$dir/
+exit
+
+rsync -avzh bo.cui@cdxfer.wcoss2.ncep.noaa.gov:$COM_c/$dir/*f05* $COM_d/$dir/
+exit
+
+exit
+rm -rf $COM_d/$dir
+mkdir -p $COM_d/$dir
+scp  bo.cui@cdxfer.wcoss2.ncep.noaa.gov:$COM_c/$dir/*00* $COM_d/$dir/
+scp  bo.cui@cdxfer.wcoss2.ncep.noaa.gov:$COM_c/$dir/*f01* $COM_d/$dir/
+scp  bo.cui@cdxfer.wcoss2.ncep.noaa.gov:$COM_c/$dir/*f02* $COM_d/$dir/
+

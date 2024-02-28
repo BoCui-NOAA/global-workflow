@@ -18,7 +18,6 @@
 #   7) 2018-07-18       Guang Ping Lou Generalize this version to other platforms
 #   8) 2019-10-18       Guang Ping Lou Transition to reading in NetCDF model data
 #   9) 2019-12-18       Guang Ping Lou generalizing to reading in NetCDF or nemsio
-#  10) 2023-12-18       Bo Cui modified to allow midstream restart 
 ################################################################
 
 source "$HOMEgfs/ush/preamble.sh"
@@ -49,33 +48,9 @@ GETDIM="${HOMEgfs}/ush/getncdimlen"
 LEVS=$(${GETDIM} "${COM_ATMOS_HISTORY}/${RUN}.${cycle}.atmf000.${atmfm}" pfull)
 declare -x LEVS
 
-if [ $RESTART = YES ]; then
-
-# make a count of avaiable files in restart dir: out_gfs_bufr_$FEND
-# set resterr accordingly and used in ush/gfs_bufr.sh
-
-  files=`ls ${COM_ATMOS_RESTART}/${RUN}.${cycle}.bufr.logf* | wc -l`
-  echo $files
-
-  if [ $files -ge 1 ]; then
-    echo "Set resterr =0 and allow GFS bufr sounding job midstraem restart"
-    export resterr=0
-  else
-    echo "Lack content in dir to restart properly, GFS bufr sounding job cold start"
-    export resterr=1
-  fi
-
-else
-
-  echo "Cold start GFS bufr sounding job"
-  export resterr=1
-
-fi
-
 ### Loop for the hour and wait for the sigma and surface flux file:
 export FSTART=$STARTHOUR
 #
-
 while [ $FSTART -lt $ENDHOUR ]
 do
 export FINT=$NINT1
@@ -96,7 +71,8 @@ export FINT=$NINT1
 
    ic=0
    while [ $ic -lt 1000 ]; do
-      if [[ ! -f "${COM_ATMOS_HISTORY}/${RUN}.${cycle}.atm.logf${FEND}.${logfm}" ]]; then
+#     if [[ ! -f "${COM_ATMOS_HISTORY}/${RUN}.${cycle}.atm.logf${FEND}.${logfm}" ]]; then
+      if [[ ! -f "${COM_ATMOS_HISTORY}/${RUN}.${cycle}.logf${FEND}.${logfm}" ]]; then
           sleep 10
           ic=$(expr $ic + 1)
       else

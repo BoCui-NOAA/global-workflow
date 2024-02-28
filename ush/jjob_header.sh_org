@@ -93,9 +93,8 @@ export pgmerr=errfile
 #############################
 # Source relevant config files
 #############################
-export EXPDIR="${EXPDIR:-${HOMEgfs}/parm/config/gfs}"
-#for config in "${configs[@]:-''}"; do
-for config in postsnd; do
+export EXPDIR="${EXPDIR:-${HOMEgfs}/parm/config}"
+for config in "${configs[@]:-''}"; do
     source "${EXPDIR}/config.${config}"
     status=$?
     if (( status != 0 )); then

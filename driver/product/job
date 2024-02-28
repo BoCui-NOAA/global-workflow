@@ -1,0 +1,11 @@
+
+cd /lfs/h2/emc/vpppg/noscrub/bo.cui/BUFR/data_bufr_ctl
+
+ls hr*/*0213/00/*/*/*
+exit
+ls /lfs/h2/emc/vpppg/noscrub/bo.cui/BUFR/data_bufr_ctl/hr3scoutC*/g*/00/m*/a*/h*
+exit
+qsub run_postsnd.sh.wcoss2
+exit
+grep -i "exit status" postsnd.e*
+exit

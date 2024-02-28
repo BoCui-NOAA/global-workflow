@@ -1,0 +1,170 @@
+#!/bin/sh
+#PBS -j eo  
+#PBS -q dev
+##PBS -l select=3:mpiprocs=16:ompthreads=8:ncpus=128
+#PBS -l select=4:mpiprocs=10:ompthreads=8:ncpus=80
+#PBS -l debug=true
+#PBS -l walltime=1:30:0
+#PBS -A GFS-DEV
+#PBS -N postsnd
+
+############################################
+# Loading module
+############################################
+set -xa
+pwd
+cd $PBS_O_WORKDIR
+module list
+module reset
+source ../../versions/run.ver
+pwd
+
+module load intel/$intel_ver
+module load prod_envir/$prod_envir_ver
+module load PrgEnv-intel/$PrgEnv_intel_ver
+module load craype/$craype_ver
+module load cray-mpich/$cray_mpich_ver
+module load cray-pals/$cray_pals_ver
+module load prod_util/$prod_util_ver
+module load hdf5/$hdf5_ver
+module load netcdf/$netcdf_ver
+module load gempak/$gempak_ver
+module load cfp/$cfp_ver
+module load python/$python_ver
+
+module list
+
+echo $PBS_O_WORKDIR
+########################################
+# Runs GFS BUFR SOUNDINGS
+########################################
+
+machine="WCOSS2"
+
+export npe_postsnd=40
+export npe_node_postsnd=128
+export npe_postsndcfp=9
+
+export OUTPUT_FILE=${OUTPUT_FILE:-netcdf}
+
+##For WCOSS2 ################
+
+if [ $machine == "WCOSS2" ]; then
+  if [ $OUTPUT_FILE == "netcdf" ]; then
+   export FHMAX_HF_GFS=120
+   export FHOUT_HF_GFS=1
+   export FHOUT_GFS=3
+  else
+   export FHMAX_HF_GFS=120
+   export FHOUT_HF_GFS=1
+   export FHOUT_GFS=3
+  fi
+  export OMP_NUM_THREADS=1
+  export APRUN_POSTSND="mpiexec -l -n $npe_postsnd --depth=8 --cpu-bind depth"
+  export APRUN_POSTSNDCFP="mpiexec -l -n $npe_postsndcfp --cpu-bind verbose,core cfp"
+
+else
+##For Theia, Jet################
+  export FHMAX_HF_GFS=0
+  export FHOUT_HF_GFS=0
+  export launcher="mpirun -np"
+  export APRUN_POSTSND="$launcher $npe_postsnd"
+  export APRUN_POSTSNDCFP="$launcher $npe_postsndcfp"
+fi
+
+#export PS4='$SECONDS + '
+date
+# #### 08/25/1999 ###################
+# SET SHELL PROCESSING VARIABLES
+# ###################################
+#
+#Specify whether the run is production or development
+#
+export envir=${envir:-prod}
+
+####################################
+# Specify version numbers
+####################################
+export gfs_bufrsnd_ver=${gfs_bufrsnd_ver:-v1.0.2}
+export gsm_ver=${gsm_ver:-v12.0.0}
+export util_ver=${util_ver:-v1.0.0}
+
+# obtain unique process id (pid) and make temp directories
+#
+export pid=$$
+
+export DATA_IN=${DATA_IN:-/lfs/h2/emc/ptmp/$USER}
+export DATA=$DATA_IN/postsnd.${pid}
+mkdir -p $DATA
+cd $DATA
+
+export PDY=20210823
+export cyc=00
+export STARTHOUR=00
+export ENDHOUR=180
+export KEEPDATA="NO"
+
+####################################
+# File To Log Msgs
+####################################
+job=gfs_postsnd_test
+
+####################################
+# Determine Job Output Name on System
+####################################
+export outid="LL$job"
+export jobid="${outid}.o${pid}"
+export pgmout="OUTPUT.${pid}"
+
+#export cycle=t${cyc}z
+
+export SENDCOM=YES
+export SENDECF=YES
+export SENDDBN=YES
+
+export NET=gfs
+export RUN=gfs
+export model=gfs
+export pcom=$DATA_IN/pcom/gfs
+mkdir -p $pcom
+
+###################################
+# Set up the UTILITIES
+###################################
+
+export HOMEbufrsnd=/lfs/h2/emc/vpppg/noscrub/bo.cui/git/global-workflow_BoCui
+
+export HOMEgfs=$HOMEbufrsnd
+
+### add FHMAX_GFS for parm/config/gfs/config.postsnd
+export FHMAX_GFS=180
+###
+
+##############################
+# Define COM Directories
+##############################
+
+#export PDY=$PDY
+#export cyc=$cyc
+
+export ROTDIR=/lfs/h2/emc/vpppg/noscrub/$LOGNAME/BUFR/data_bufr_ctl 
+export COM_BASE=${ROTDIR}/${RUN}.${PDY}/${cyc}
+export COM_ATMOS_HISTORY=${COM_BASE}/model_data/atmos/history
+
+export COM_ATMOS_BUFR=$DATA_IN/com_bufr/${NET}/${envir}/${RUN}.${PDY}/$cyc/products/atmos/bufr
+export COM_ATMOS_WMO=$DATA_IN/com_bufr/${NET}/${envir}/${RUN}.${PDY}/$cyc/products/atmos/wmo
+export COM_ATMOS_GEMPAK=$DATA_IN/com_bufr/${NET}/${envir}/${RUN}.${PDY}/$cyc/products/atmos/gempak
+
+env
+
+########################################################
+# Execute the script.
+${HOMEbufrsnd}/jobs/JGFS_ATMOS_POSTSND
+########################################################
+
+#cat $pgmout
+
+#cd /tmpnwprd1
+#rm -rf $DATA
+date
+

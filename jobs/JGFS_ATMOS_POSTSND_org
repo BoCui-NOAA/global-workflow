@@ -33,13 +33,13 @@ export SCRbufrsnd=${SCRbufrsnd:-${HOMEbufrsnd}/scripts}
 ##############################
 export DBNROOT=${DBNROOT:-${UTILROOT}/fakedbn}
 
-#YMD=${PDY} HH=${cyc} generate_com -rx COM_ATMOS_HISTORY COM_ATMOS_BUFR \
-#  COM_ATMOS_WMO COM_ATMOS_GEMPAK COM_ATMOS_RESTART
+YMD=${PDY} HH=${cyc} generate_com -rx COM_ATMOS_HISTORY COM_ATMOS_BUFR \
+  COM_ATMOS_WMO COM_ATMOS_GEMPAK
 
 [[ ! -d ${COM_ATMOS_BUFR} ]] && mkdir -p "${COM_ATMOS_BUFR}"
 [[ ! -d ${COM_ATMOS_GEMPAK} ]] && mkdir -p "${COM_ATMOS_GEMPAK}"
 [[ ! -d ${COM_ATMOS_WMO} ]] && mkdir -p "${COM_ATMOS_WMO}"
-[[ ! -d ${COM_ATMOS_RESTART} ]] && mkdir -p "${COM_ATMOS_RESTART}"
+
 
 ########################################################
 # Execute the script.

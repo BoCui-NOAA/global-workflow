@@ -1,0 +1,24 @@
+
+1. C768
+
+/scratch1/NCEPDEV/climate/Jessica.Meixner/HR3/scoutruns/scouthr3t01/COMROOT/scouthr3t01/gfs.20200913
+2020012300 /lfs/h2/emc/couple/noscrub/jessica.meixner/HR3/scoutruns/hr3scoutC768 (wave point job failed, on disk only) 
+2020021300 2 day run only /lfs/h2/emc/couple/noscrub/jessica.meixner/HR3/scoutruns/t02C768
+HPSS /NCEPDEV/emc-climate/1year/jessica.meixner/WCOSS2/scratch/t04C768/2020021300
+
+2. 
+
+Cactus: 2020012300  /lfs/h2/emc/couple/noscrub/jessica.meixner/HR3/scoutruns/hr3scoutC1152 (did not complete full 384 days) 
+Cactus: 2020021300 2 day run only /lfs/h2/emc/couple/noscrub/jessica.meixner/HR3/scoutruns/t02C1152
+Full run, HPSS only: /NCEPDEV/emc-climate/1year/jessica.meixner/WCOSS2/scratch/t04C1152/2020021300/
+
+
+** compare C768 and C1152 
+
+
+
+/lfs/h2/emc/couple/noscrub/jessica.meixner/HR3/scoutruns/hr3scoutC1152/COMROOT/hr3scoutC1152/gfs.20200123/00/model_data/atmos/history
+
+cactus: 2020021300 2 day run only
+/lfs/h2/emc/couple/noscrub/jessica.meixner/HR3/scoutruns/t02C1152/COMROOT/t02C1152/gfs.20200213/00/model_data/atmos/history
+

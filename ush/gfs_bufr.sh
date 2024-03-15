@@ -18,6 +18,7 @@
 # 2018-05-30  Guang Ping Lou: Make sure all files are available.
 # 2019-10-10  Guang Ping Lou: Read in NetCDF files
 # 2023-12-18  Bo Cui: modified to allow midstream restart
+# 2024-03-03  Bo Cui: added options to get different bufr table for different resolution input files  
 # echo "History: February 2003 - First implementation of this utility script"
 #
 source "${HOMEgfs:?}/ush/preamble.sh"
@@ -79,7 +80,20 @@ done
 #  define input BUFR table file.
 ln -sf "${PARMbufrsnd}/bufr_gfs_${CLASS}.tbl" fort.1
 ln -sf "${STNLIST:-${PARMbufrsnd}/bufr_stalist.meteo.gfs}" fort.8
-ln -sf "${PARMbufrsnd}/bufr_ij13km.txt" fort.7
+
+case "${CASE}" in 
+    "C768")
+        ln -sf "${PARMbufrsnd}/bufr_ij13km.txt" fort.7
+        ;;
+    "C1152")
+        ln -sf "${PARMbufrsnd}/bufr_ij9km.txt" fort.7
+        ;;
+    *) 
+        echo "FATAL ERROR: Unrecognized bufr_ij*km.txt For CASE ${CASE}, ABORT!"
+        exit 1
+        ;;
+esac
+
 
 if [ $resterr -eq 0 ]; then
 

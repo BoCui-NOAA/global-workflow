@@ -53,7 +53,7 @@ if [ $machine == "WCOSS2" ]; then
 
 # export FHMAX_HF_GFS=120
 # export FHOUT_HF_GFS=1
-  export FHMAX_HF_GFS=024
+  export FHMAX_HF_GFS=048
   export FHOUT_HF_GFS=3
   export FHOUT_GFS=3
 
@@ -104,7 +104,7 @@ export cyc=00
 
 export STARTHOUR=00
 #export ENDHOUR=180
-export ENDHOUR=024
+export ENDHOUR=048
 export KEEPDATA="YES"
 
 ####################################
@@ -148,6 +148,7 @@ export FHMAX_GFS=180
 ##############################
 
 export RESTART=NO 
+export IF_RUNC1152=YES
 
 #export ROTDIR=/lfs/h2/emc/ptmp/bo.cui/data/hr3scoutC1152
 export ROTDIR=/lfs/h2/emc/vpppg/noscrub/bo.cui/BUFR/data_bufr_ctl/hr3scoutC1152

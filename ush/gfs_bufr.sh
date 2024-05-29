@@ -97,7 +97,7 @@ esac
 
 if [[ ${RESTART_postsnd} == "YES" ]]; then
 
-  if [ -f ${DATA_ATMOS_RESTART}/${RUN}.${cycle}.bufr.logf${FEND}.${logfm} ]; then
+  if [ -f "${DATA_ATMOS_RESTART}/${RUN}.${cycle}.bufr.logf${FEND}.${logfm}" ]; then
 
     echo "Copy job postsnd files from restart directory"
 
@@ -108,7 +108,7 @@ if [[ ${RESTART_postsnd} == "YES" ]]; then
     done < ${RUN}.${cycle}.bufr.logf${FEND}.${logfm}
     err=0
 
-    if [ $FEND -eq $ENDHOUR ]; then
+    if [ ${FEND} -eq ${ENDHOUR} ]; then
       ${APRUN_POSTSND} "${EXECgfs}/${pgm}" < gfsparm > "out_gfs_bufr_${FEND}"
       export err=$?
     fi
@@ -137,18 +137,29 @@ if [ $err -ne 0 ]; then
 else
 
   # Count the number of restart files
-  nrestarts=$(find -maxdepth 1 -type f -name 'fort.*' | wc -l)
-  echo "Number of restart fort.* files found: $nrestarts"
+  nrestarts=$(find ./ -maxdepth 1 -type f -name 'fort.*' | wc -l)
+  echo "Number of restart fort.* files found: ${nrestarts}"
 
   # Check if there are restart files
   if [ "$nrestarts" -gt 0 ]; then
     echo "Copying GFS postsnd files to restart directory..."
 
     # Exclude specific files and save the rest to a log file
-    ls fort.* | grep -v -e 'fort\.1' -e 'fort\.7' -e 'fort\.8' > "${RUN}.${cycle}.bufr.logf${FEND}.${logfm}"
+    #ls fort.* | grep -v -e 'fort\.1' -e 'fort\.7' -e 'fort\.8' > "${RUN}.${cycle}.bufr.logf${FEND}.${logfm}"
+    
+    # Initialize an empty array to store fort file names
+    files=()
 
-    # Copy the log file to the restart directory
-    cp -p "${RUN}.${cycle}.bufr.logf${FEND}.${logfm}" "${DATA_ATMOS_RESTART}/"
+    # Loop through files in the directory
+    for file in fort.*; do
+      # Check if the file is not fort.1 or fort.7 or fort.8
+      if [[ $file != "fort.1" && $file != "fort.7" && $file != "fort.8" ]]; then
+        files+=("$file")
+      fi
+    done
+
+    # Write the list of fort files to the log file
+    printf "%s\n" "${files[@]}" > "${RUN}.${cycle}.bufr.logf${FEND}.${logfm}"
 
     # Copy each restart file to the restart directory
     while IFS= read -r fortname; do
@@ -156,6 +167,9 @@ else
       cp -p "${fortname}" "${DATA_ATMOS_RESTART}/${RUN}.${cycle}.bufr_${fortname}"
     done < "${RUN}.${cycle}.bufr.logf${FEND}.${logfm}"
   fi
+
+    # Copy the log file to the restart directory
+    cp -p "${RUN}.${cycle}.bufr.logf${FEND}.${logfm}" "${DATA_ATMOS_RESTART}/"
 
 fi
 

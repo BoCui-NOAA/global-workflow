@@ -128,7 +128,7 @@ else
   export err=$?
 fi
 
-if [ $err -ne 0 ]; then
+if [[ $err -ne 0 ]]; then
    echo "GFS postsnd job error, Please check files "
    echo "${COM_ATMOS_HISTORY}/${RUN}.${cycle}.atmf${hh2}.${atmfm}"
    echo "${COM_ATMOS_HISTORY}/${RUN}.${cycle}.sfcf${hh2}.${atmfm}"
@@ -138,10 +138,16 @@ else
 
   # Count the number of restart files
   nrestarts=$(find ./ -maxdepth 1 -type f -name 'fort.*' | wc -l)
-  echo "Number of restart fort.* files found: ${nrestarts}"
+  find_exit_code=$?
+  if [ $find_exit_code -ne 0 ]; then
+    # handle the error, set the number of restart file is 0
+    nrestarts=0
+  else
+    echo "Number of restart fort.* files found: ${nrestarts}"
+  fi
 
   # Check if there are restart files
-  if [ "$nrestarts" -gt 0 ]; then
+  if [[ "${nrestarts}" -gt 0 ]]; then
     echo "Copying GFS postsnd files to restart directory..."
 
     # Exclude specific files and save the rest to a log file
@@ -153,8 +159,8 @@ else
     # Loop through files in the directory
     for file in fort.*; do
       # Check if the file is not fort.1 or fort.7 or fort.8
-      if [[ $file != "fort.1" && $file != "fort.7" && $file != "fort.8" ]]; then
-        files+=("$file")
+      if [[ ${file} != "fort.1" && $file != "fort.7" && $file != "fort.8" ]]; then
+        files+=("${file}")
       fi
     done
 

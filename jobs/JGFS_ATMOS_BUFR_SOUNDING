@@ -1,13 +1,16 @@
 #! /usr/bin/env bash
 
 source "${HOMEgfs}/ush/preamble.sh"
-source "${HOMEgfs}/ush/jjob_header.sh" -e "postsnd" -c "base postsnd"
+source "${HOMEgfs}/ush/jjob_header.sh" -e "bufr_sounding" -c "base bufr_sounding"
 
+# Create directory to hold intermediate bufr files
+export DATAoutput="${DATAROOT}/bufr_${PDY}${cyc}"
+if [[ -d "${DATAoutput}" ]]; then mkdir -p "${DATAoutput}"; fi
 
 ##############################################
 # Set variables used in the exglobal script
 ##############################################
-export CDUMP=${RUN/enkf}
+export CDUMP=${RUN/enkf/}
 
 ########################################
 # Runs GFS BUFR SOUNDINGS
@@ -20,26 +23,23 @@ export DBNROOT=${DBNROOT:-${UTILROOT}/fakedbn}
 ##############################
 # Define COM Directories
 ##############################
-export DBNROOT=${DBNROOT:-${UTILROOT}/fakedbn}
-
 YMD=${PDY} HH=${cyc} declare_from_tmpl -rx COM_ATMOS_HISTORY COM_ATMOS_BUFR \
-  COM_ATMOS_WMO COM_ATMOS_GEMPAK
+    COM_ATMOS_WMO COM_ATMOS_GEMPAK
 
 [[ ! -d ${COM_ATMOS_BUFR} ]] && mkdir -p "${COM_ATMOS_BUFR}"
 [[ ! -d ${COM_ATMOS_GEMPAK} ]] && mkdir -p "${COM_ATMOS_GEMPAK}"
 [[ ! -d ${COM_ATMOS_WMO} ]] && mkdir -p "${COM_ATMOS_WMO}"
 
-# Create a restart directory in ptmp to hold temporary output from the job JGFS_ATMOS_POSTSND
+# Create a restart directory in ptmp to hold temporary output from the job JGFS_ATMOS_bufr_sounding
 
 export DATA_ATMOS_RESTART=${DATAROOT}/${RUN}.${PDY}/${cyc}/products/atmos/restart
 if [[ ! -d ${DATA_ATMOS_RESTART} ]]; then mkdir -p "${DATA_ATMOS_RESTART}"; fi
 
 ########################################################
 # Execute the script.
-${SCRgfs}/exgfs_atmos_postsnd.sh
+"${SCRgfs}/exgfs_atmos_bufr_sounding.sh"
 status=$?
-[[ ${status} -ne 0 ]] && exit ${status}
-
+[[ ${status} -ne 0 ]] && exit "${status}"
 
 ##############################################
 # End JOB SPECIFIC work
@@ -48,16 +48,14 @@ status=$?
 ##############################################
 # Final processing
 ##############################################
-if [ -e "${pgmout}" ] ; then
-  cat ${pgmout}
+if [[ -e "${pgmout}" ]]; then
+    cat "${pgmout}"
 fi
 
 ##########################################
 # Remove the Temporary working directory
 ##########################################
-cd ${DATAROOT}
-[[ ${KEEPDATA} = "NO" ]] && rm -rf ${DATA}
-
+cd "${DATAROOT}" || exit 0
+[[ ${KEEPDATA} = "NO" ]] && rm -rf "${DATA}"
 
 exit 0
-

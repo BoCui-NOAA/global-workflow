@@ -55,7 +55,7 @@ export RESTART_postsnd="NO"
 
 # However, if there was a run before, a directory DATA_ATMOS_RESTART must exist with data in it.
 
-nrestarts=$(find "$DATA_ATMOS_RESTART" -maxdepth 1 -type f -name '*.bufr.logf*' | wc -l || true)
+nrestarts=$(find "$DATA_ATMOS_RESTART" -maxdepth 1 -type f -name '*.bufr.logf*' | wc -l || 0)
 
 echo "${nrestarts}"
 
@@ -110,7 +110,7 @@ done
 ##############################################################
 cd "${COM_ATMOS_BUFR}" || exit 2
 tar -cf - . | /usr/bin/gzip > "${RUN}.${cycle}.bufrsnd.tar.gz"
-cd "${DATA}" || exit
+cd "${DATA}" || exit 2
 
 ########################################
 # Send the single tar file to OSO

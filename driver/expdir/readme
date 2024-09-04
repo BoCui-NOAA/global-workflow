@@ -1,0 +1,11 @@
+
+# copy config and rocotoo files
+
+cp -rp /lfs/h2/emc/ptmp/bo.cui/expdir/test .
+
+# to run rocoto files, need two directories
+
+/lfs/h2/emc/ptmp/bo.cui/comroot/test
+/lfs/h2/emc/ptmp/bo.cui/expdir/test
+
+# need modify test.xml to add gfs_postsnd job

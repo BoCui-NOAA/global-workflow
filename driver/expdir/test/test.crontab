@@ -1,0 +1,5 @@
+
+#################### test ####################
+MAILTO=""
+*/5 * * * * /apps/ops/test/nco/core/rocoto.v1.3.5/bin/rocotorun -d /lfs/h2/emc/ptmp/bo.cui/expdir/test/test.db -w /lfs/h2/emc/ptmp/bo.cui/expdir/test/test.xml
+#################################################################

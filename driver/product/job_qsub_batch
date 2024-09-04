@@ -1,0 +1,8 @@
+    icnt=0 
+    ncnt=150
+    while [ $icnt -le $ncnt ]; do
+     qsub run_postsnd.sh.wcoss2_thread1_batch
+     sleep 240
+     icnt=`expr $icnt + 1`
+     echo $icnt
+   done

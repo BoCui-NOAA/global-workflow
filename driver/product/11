@@ -1,0 +1,24 @@
+#!/bin/bash
+#PBS -N out_scp_C768
+#PBS -j oe
+#PBS -S /bin/bash
+#PBS -q dev_transfer
+#PBS -A NAEFS-DEV
+#PBS -l walltime=05:35:00
+#PBS -l select=1:ncpus=1:mem=2GB
+##PBS -l debug=true
+
+PDY=20191203
+
+COM_d=/lfs/h2/emc/vpppg/noscrub/bo.cui/BUFR/data_bufr_ctl/C768_orig  
+
+COM_c=/lfs/h2/emc/vpppg/noscrub/bo.cui/BUFR/data_bufr_ctl/C768_orig   
+mkdir -p $COM_c
+dir=gfs.${PDY}/00/model_data/atmos/history
+
+mkdir -p $COM_c/$dir
+
+rsync -avzh bo.cui@ddxfer.wcoss2.ncep.noaa.gov:$COM_d/$dir/*f00*  $COM_c/$dir/
+rsync -avzh bo.cui@ddxfer.wcoss2.ncep.noaa.gov:$COM_d/$dir/*f012* $COM_c/$dir/
+
+

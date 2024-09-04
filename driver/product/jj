@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Define an array of hours
+hour_list=(000 003 006 009 012 015 018)
+ENDHOUR=018
+NLN=ln # Assuming NLN is an alias for 'ln' (symbolic link creation)
+DATA=/path/to/data # Define the path to data
+
+# Initialize fortnum
+fortnum=20
+
+# Loop through each element in the array
+for fhr in "${hour_list[@]}"; do
+    # Increment fortnum
+    fortnum=$((fortnum + 1))
+    # Create symbolic link
+    echo   "${DATA}/${fhr}/fort.${fortnum}" "fort.${fortnum}"
+done
+

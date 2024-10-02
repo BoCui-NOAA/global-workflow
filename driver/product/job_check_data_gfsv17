@@ -1,16 +1,25 @@
 
 COM=/lfs/h2/emc/ptmp/$LOGNAME/com_bufr/gfs/prod
+COM=/lfs/h2/emc/ptmp/$LOGNAME/com_hr3scoutC768/gfs/prod
+COM=/lfs/h2/emc/ptmp/$LOGNAME/com_hr3scoutC1152/gfs/prod
+COM=/lfs/h2/emc/ptmp/$LOGNAME/com_C768_orig/gfs/prod
+COM=/lfs/h2/emc/ptmp/$LOGNAME/com_C768_orig/gfs/prod
+COM=/lfs/h2/emc/ptmp/$LOGNAME/com_C768_3Dsoil_v1/gfs/prod
+COM=/lfs/h2/emc/ptmp/$LOGNAME/com_C96_3Dsoil/gfs/prod
+COM=/lfs/h2/emc/ptmp/$LOGNAME/com_C1152_3Dsoil/gfs/prod
 
-#PDY=20210823
 PDY=20191203
+PDY=20210823
 cyc=00
 
+PDY=20200126 
+cyc=00
 echo $COM/gfs.$PDY/$cyc/products/atmos/bufr
 
 ls $COM/gfs.$PDY/$cyc/products/atmos/bufr | wc
 ls $COM/gfs.$PDY/$cyc/products/atmos/wmo       | wc
 ls $COM/gfs.$PDY/$cyc/products/atmos/gempak    | wc
-ls $COM/gfs.$PDY/$cyc/model_data/atmos/restart | wc
+ls $COM/gfs.$PDY/$cyc/products/atmos/restart | wc
 
 exit
 

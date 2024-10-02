@@ -53,7 +53,7 @@ if [ $machine == "WCOSS2" ]; then
 
 # export FHMAX_HF_GFS=120
 # export FHOUT_HF_GFS=1
-  export FHMAX_HF_GFS=036
+  export FHMAX_HF_GFS=120
   export FHOUT_HF_GFS=3
   export FHOUT_GFS=3
 
@@ -96,15 +96,15 @@ export DATA=$DATA_IN/postsnd.${pid}
 mkdir -p $DATA
 cd $DATA
 
-#export PDY=20191203
 #export PDY=20210823
+#export PDY=20200123
 #export PDY=20200213
-export PDY=20200123
+export PDY=20191203
 export cyc=00
 
 export STARTHOUR=00
 #export ENDHOUR=180
-export ENDHOUR=036
+export ENDHOUR=120
 export KEEPDATA="YES"
 
 ####################################
@@ -135,8 +135,6 @@ mkdir -p $pcom
 # Set up the UTILITIES
 ###################################
 
-#export HOMEbufrsnd=/lfs/h2/emc/vpppg/noscrub/bo.cui/git/global-workflow_BoCui_develop
-
 export HOMEgfs=/lfs/h2/emc/vpppg/noscrub/bo.cui/git/global-workflow_BoCui_develop
 export SCRgfs=$HOMEgfs/scripts
 export USHgfs=$HOMEgfs/ush     
@@ -145,25 +143,25 @@ export PARMgfs=$HOMEgfs/parm
 export FIXgfs=$HOMEgfs/fix  
 
 ### add FHMAX_GFS for parm/config/gfs/config.postsnd
-export FHMAX_GFS=036
+export FHMAX_GFS=120
 ###
 
 ##############################
 # Define COM Directories
 ##############################
 
-export CASE=C1152
+export CASE=C768
 
-export ROTDIR=/lfs/h2/emc/vpppg/noscrub/bo.cui/BUFR/data_bufr_ctl/hr3scoutC1152
+export ROTDIR=/lfs/h2/emc/vpppg/noscrub/bo.cui/BUFR/data_bufr_ctl/C768_orig
 export COM_BASE=${ROTDIR}/${RUN}.${PDY}/${cyc}
 export COM_ATMOS_HISTORY=${COM_BASE}/model_data/atmos/history
 
-export COM_ATMOS_BUFR=$DATA_IN/com_hr3scoutC1152/${NET}/${envir}/${RUN}.${PDY}/$cyc/products/atmos/bufr
-export COM_ATMOS_WMO=$DATA_IN/com_hr3scoutC1152/${NET}/${envir}/${RUN}.${PDY}/$cyc/products/atmos/wmo
-export COM_ATMOS_GEMPAK=$DATA_IN/com_hr3scoutC1152/${NET}/${envir}/${RUN}.${PDY}/$cyc/products/atmos/gempak
+export COM_ATMOS_BUFR=$DATA_IN/com_C768_orig/${NET}/${envir}/${RUN}.${PDY}/$cyc/products/atmos/bufr
+export COM_ATMOS_WMO=$DATA_IN/com_C768_orig/${NET}/${envir}/${RUN}.${PDY}/$cyc/products/atmos/wmo
+export COM_ATMOS_GEMPAK=$DATA_IN/com_C768_orig/${NET}/${envir}/${RUN}.${PDY}/$cyc/products/atmos/gempak
 
 export PTMP=/lfs/h2/emc/ptmp/bo.cui
-export DATA_ATMOS_RESTART=$PTMP/com_hr3scoutC1152/${NET}/${envir}/${RUN}.${PDY}/$cyc/products/atmos/restart
+export DATA_ATMOS_RESTART=$PTMP/com_C768_orig/${NET}/${envir}/${RUN}.${PDY}/$cyc/products/atmos/restart
 
 export NLN="ln -fs"
 

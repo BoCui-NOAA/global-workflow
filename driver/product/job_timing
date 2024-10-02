@@ -1,2 +1,6 @@
 
-grep "EST 2023"  postsnd.e*
+grep "EST 2024"  postsnd.e*
+exit 
+grep "stime"  postsnd.e*
+grep "etime"  postsnd.e*
+exit

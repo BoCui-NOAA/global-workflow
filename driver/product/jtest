@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Define an array of hours
+hour_list=(000 003 006 009 012 015 018 180)
+
+NEND1=120
+NINT3=3
+NINT1=1
+# Loop through each element in the array
+for fhr in "${hour_list[@]}"; do
+  echo "Processing hour: $fhr"
+  # Add your processing commands here
+  if [[ $((10#${fhr})) -gt $((10#${NEND1})) ]]; then
+    export FINT=$NINT3
+  fi
+  if [ ${fhr} -eq 000 ]; then
+     export F00FLAG=YES
+  else
+     export F00FLAG=NO
+  fi
+  echo $fhr $FINT $F00FLAG
+done
+

@@ -96,9 +96,9 @@ export DATA=$DATA_IN/postsnd.${pid}
 mkdir -p $DATA
 cd $DATA
 
-#export PDY=20191203
 #export PDY=20210823
-export PDY=20200213
+#export PDY=20200213
+export PDY=20191203
 export cyc=00
 
 export STARTHOUR=00
@@ -146,10 +146,11 @@ export FHMAX_GFS=180
 # Define COM Directories
 ##############################
 
-export RESTART=YES
+export RESTART=NO 
+export CASE=C760        
 
-#export ROTDIR=/lfs/h2/emc/vpppg/noscrub/$LOGNAME/BUFR/data_bufr_ctl 
-export ROTDIR=/lfs/h2/emc/ptmp/bo.cui/data
+export ROTDIR=/lfs/h2/emc/vpppg/noscrub/$LOGNAME/BUFR/data_bufr_ctl 
+#export ROTDIR=/lfs/h2/emc/ptmp/bo.cui/data
 export COM_BASE=${ROTDIR}/${RUN}.${PDY}/${cyc}
 export COM_ATMOS_HISTORY=${COM_BASE}/model_data/atmos/history
 
